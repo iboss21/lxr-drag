@@ -154,12 +154,12 @@ local function StartBeingDragged(draggerServerId)
         0,                      -- Bone index (0 = root bone)
         0.0, -0.5, 0.0,        -- Offset X, Y, Z (behind the dragger)
         0.0, 0.0, 0.0,         -- Rotation X, Y, Z
-        false,                  -- p9
-        false,                  -- useSoftPinning
-        false,                  -- collision
-        false,                  -- isPed
-        2,                      -- vertexIndex
-        true                    -- fixedRot
+        false,                  -- p9 - unknown parameter
+        false,                  -- useSoftPinning - disable soft pinning for firm attachment
+        false,                  -- collision - disable collision between entities
+        false,                  -- isPed - not a ped-to-ped bone attachment
+        2,                      -- vertexIndex - vertex index for attachment
+        true                    -- fixedRot - keep rotation fixed to parent
     )
     
     -- Play enter animation
