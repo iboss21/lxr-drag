@@ -280,7 +280,7 @@ Config.Animations = {
     },
     
     flags = {
-        enter = 1,    -- Animation flag for entering drag (repeat)
+        enter = 49,   -- Animation flag for entering drag (upper body, can be interrupted, loops)
         release = 0,  -- Animation flag for release (normal)
         throw = 0     -- Animation flag for throw (normal)
     }
