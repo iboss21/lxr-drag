@@ -147,6 +147,21 @@ local function StartBeingDragged(draggerServerId)
     isBeingDragged = true
     draggerPed = GetPlayerPed(GetPlayerFromServerId(draggerServerId))
     
+    -- Attach to dragger for smooth dragging
+    AttachEntityToEntity(
+        playerPed,              -- Entity to attach (victim)
+        draggerPed,             -- Entity to attach to (dragger)
+        0,                      -- Bone index (0 = root bone)
+        0.0, -0.5, 0.0,        -- Offset X, Y, Z (behind the dragger)
+        0.0, 0.0, 0.0,         -- Rotation X, Y, Z
+        false,                  -- p9 - unknown parameter
+        false,                  -- useSoftPinning - disable soft pinning for firm attachment
+        false,                  -- collision - disable collision between entities
+        false,                  -- isPed - not a ped-to-ped bone attachment
+        2,                      -- vertexIndex - vertex index for attachment
+        true                    -- fixedRot - keep rotation fixed to parent
+    )
+    
     -- Play enter animation
     PlayDragAnimation(playerPed, 'enter', 'victim')
     
@@ -160,6 +175,9 @@ local function StopBeingDragged()
     local playerPed = PlayerPedId()
     
     if isBeingDragged then
+        -- Detach from dragger
+        DetachEntity(playerPed, true, false)
+        
         -- Play release animation
         PlayDragAnimation(playerPed, 'release', 'victim')
         Wait(1000) -- Let animation play
@@ -188,18 +206,6 @@ CreateThread(function()
             
             -- Check if dragger still exists and is close
             if DoesEntityExist(draggerPed) then
-                local draggerCoords = GetEntityCoords(draggerPed)
-                local draggerHeading = GetEntityHeading(draggerPed)
-                
-                -- Position behind the dragger
-                local offsetX = draggerCoords.x - (math.sin(math.rad(draggerHeading)) * 0.5)
-                local offsetY = draggerCoords.y - (math.cos(math.rad(draggerHeading)) * 0.5)
-                local offsetZ = draggerCoords.z
-                
-                -- Update position
-                SetEntityCoords(playerPed, offsetX, offsetY, offsetZ, false, false, false, true)
-                SetEntityHeading(playerPed, draggerHeading)
-                
                 -- Ensure animation is playing
                 if not IsEntityPlayingAnim(playerPed, Config.Animations.dict, Config.Animations.victim.enter, 3) then
                     PlayDragAnimation(playerPed, 'enter', 'victim')
